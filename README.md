@@ -4,8 +4,10 @@ A Telegram bot built with TypeScript that provides news updates and AI-powered f
 
 ## Features
 
-- 🤖 Basic Telegram bot functionality
-- 📰 News fetching capabilities (coming soon)
+- 🤖 Interactive Telegram bot with command support
+- 📰 Real-time news fetching using Perplexity AI
+- 🔍 Custom news search by topic or keyword
+- 📊 Category-specific news (tech, business, sports, etc.)
 - 🗄️ PostgreSQL database integration
 - 🔧 TypeScript support with hot reload
 
@@ -31,11 +33,17 @@ TELEGRAM_BOT_TOKEN=your_bot_token_here
 DATABASE_URL=postgresql://username:password@localhost:5432/news_ai_db
 ```
 
-### 3. Get Telegram Bot Token
+### 3. Get API Keys
 
+#### Telegram Bot Token
 1. Message [@BotFather](https://t.me/BotFather) on Telegram
 2. Send `/newbot` and follow the instructions
 3. Copy the token and add it to your `.env` file
+
+#### Perplexity AI API Key
+1. Visit [Perplexity AI](https://www.perplexity.ai/) and create an account
+2. Go to your API settings and generate an API key
+3. Add the key to your `.env` file as `PERPLEXITY_API_KEY`
 
 ### 4. Run the Bot
 
@@ -210,11 +218,33 @@ news-ai/
 └── README.md         # This file
 ```
 
+## Bot Commands
+
+The bot supports the following commands:
+
+| Command | Description |
+|---------|-------------|
+| `/start` | Welcome message and bot introduction |
+| `/hello` | Get a personalized greeting |
+| `/news` | Get latest general news headlines |
+| `/tech` | Technology news |
+| `/business` | Business & finance news |
+| `/sports` | Sports news |
+| `/health` | Health & medical news |
+| `/science` | Science & research news |
+| `/politics` | Political news |
+| `/world` | World news |
+| `/entertainment` | Entertainment news |
+| `/help` | Show available commands |
+
+**Custom Search:** Send any text message (longer than 3 characters) to search for news about that topic!
+
 ## Environment Variables
 
 | Variable | Description | Required |
 |----------|-------------|----------|
 | `TELEGRAM_BOT_TOKEN` | Your Telegram bot token from BotFather | Yes |
+| `PERPLEXITY_API_KEY` | Your Perplexity AI API key for news fetching | Yes |
 | `DATABASE_URL` | PostgreSQL connection string | Yes |
 
 ## Troubleshooting
