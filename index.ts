@@ -84,7 +84,7 @@ bot.onText(/\/news/, async (msg) => {
     const newsResponse = await newsService.getLatestNews('latest news today', 5);
     const formattedNews = formatNewsResponse(newsResponse);
     
-    bot.sendMessage(chatId, formattedNews, { parse_mode: 'Markdown' });
+    bot.sendMessage(chatId, formattedNews);
   } catch (error) {
     console.error('Error fetching news:', error);
     bot.sendMessage(chatId, '❌ Sorry, I couldn\'t fetch the news right now. Please try again later.');
@@ -117,7 +117,7 @@ newsCategories.forEach(category => {
       const newsResponse = await newsService.getNewsByCategory(category, 5);
       const formattedNews = formatNewsResponse(newsResponse);
       
-      bot.sendMessage(chatId, formattedNews, { parse_mode: 'Markdown' });
+      bot.sendMessage(chatId, formattedNews);
     } catch (error) {
       console.error(`Error fetching ${category} news:`, error);
       bot.sendMessage(chatId, `❌ Sorry, I couldn't fetch ${category} news right now. Please try again later.`);
@@ -125,7 +125,7 @@ newsCategories.forEach(category => {
   });
 });
 
-// Format news response for Telegram
+// Format news response for Telegram (plain text format to avoid parsing issues)
 function formatNewsResponse(newsResponse: any): string {
   const { articles, query, timestamp } = newsResponse;
   
@@ -133,20 +133,24 @@ function formatNewsResponse(newsResponse: any): string {
     return '📰 No recent news found for your query. Please try a different topic.';
   }
   
-  let formattedMessage = `📰 *Latest News*\n`;
+  let formattedMessage = `📰 Latest News\n`;
   formattedMessage += `🔍 Query: ${query}\n`;
   formattedMessage += `⏰ Updated: ${new Date(timestamp).toLocaleString()}\n\n`;
   
   articles.forEach((article: any, index: number) => {
-    formattedMessage += `*${index + 1}. ${article.title}*\n`;
-    formattedMessage += `${article.summary}\n`;
+    const title = article.title || 'Untitled';
+    const summary = article.summary || 'No summary available';
+    const source = article.source || '';
     
-    if (article.source) {
-      formattedMessage += `📍 Source: ${article.source}\n`;
+    formattedMessage += `${index + 1}. ${title}\n`;
+    formattedMessage += `${summary}\n`;
+    
+    if (source) {
+      formattedMessage += `📍 Source: ${source}\n`;
     }
     
     if (article.url) {
-      formattedMessage += `🔗 [Read more](${article.url})\n`;
+      formattedMessage += `🔗 Read more: ${article.url}\n`;
     }
     
     formattedMessage += '\n';
@@ -173,7 +177,7 @@ bot.on('message', async (msg) => {
       const newsResponse = await newsService.getLatestNews(messageText, 3);
       const formattedNews = formatNewsResponse(newsResponse);
       
-      bot.sendMessage(chatId, formattedNews, { parse_mode: 'Markdown' });
+      bot.sendMessage(chatId, formattedNews);
     } catch (error) {
       console.error('Error fetching custom news:', error);
       bot.sendMessage(chatId, `❌ Sorry, I couldn't find news about "${messageText}". Please try again later or use /help to see available commands.`);
